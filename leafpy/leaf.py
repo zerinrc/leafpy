@@ -6,12 +6,14 @@ BASE_URL = 'https://gdcportalgw.its-mo.com/api_v181217_NE/gdc/'
 class Leaf(object):
     """Make requests to the Nissan Connect API to get Leaf Info"""
     custom_sessionid  = None
+    region_code=None
     VIN = None
 
-    def __init__(self, username=None, password=None, custom_sessionid=None, VIN=None):
+    def __init__(self, username=None, password=None, region_code='NNA', custom_sessionid=None, VIN=None):
 
         if username and password:
-            self.custom_sessionid, self.VIN = login(username, password)
+            self.custom_sessionid, self.VIN = login(username, password, region_code)
+            self.region_code=region_code
         elif custom_sessionid and VIN:
             self.custom_sessionid = custom_sessionid
             self.VIN = VIN
@@ -29,7 +31,7 @@ class Leaf(object):
         def call(**kwargs):
             url = BASE_URL + name + '.php'
             data = {
-                "RegionCode": 'NNA',
+                "RegionCode": self.region_code,
                 "custom_sessionid": self.custom_sessionid,
                 "VIN": self.VIN
             }
